@@ -26,11 +26,6 @@ pipeline {
             steps {
                 // sh "./gradlew checkstyleMain"
                 echo "Static Code Analysis success"
-                publishHTML (target: {
-                    reportDir: 'build/reports/checkstyle/',
-                    reportFiles: 'main.html',
-                    reportName: 'Checkstyle Report'
-                })
             }
         }
     }
