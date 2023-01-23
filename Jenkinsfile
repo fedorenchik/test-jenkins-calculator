@@ -1,31 +1,41 @@
 pipeline {
     agent any
     stages {
-        stage("Compile") {
+        stage('Compile') {
             steps {
-                sh "./gradlew compileJava"
+                sh './gradlew compileJava'
             }
         }
-        stage("Unit test") {
+        stage('Unit test') {
             steps {
-                sh "./gradlew test"
+                sh './gradlew test'
             }
         }
-        stage("Code coverage") {
+        stage('Code coverage') {
             steps {
-                sh "./gradlew jacocoTestReport"
+                sh './gradlew jacocoTestReport'
                 publishHTML (target: [
                     reportDir: 'build/reports/jacoco/test/html',
                     reportFiles: 'index.html',
-                    reportName: "JaCoCo Report"
+                    reportName: 'JaCoCo Report'
                 ])
-                sh "./gradlew jacocoTestCoverageVerification"
+                sh './gradlew jacocoTestCoverageVerification'
             }
         }
-        stage("Static Code Analysis") {
+        stage('Static Code Analysis') {
             steps {
                 // sh "./gradlew checkstyleMain"
-                echo "Static Code Analysis success"
+                echo 'Static Code Analysis success'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh './gradlew build'
+            }
+        }
+        stage('Docker build') {
+            steps {
+                sh 'docker build -t fedorenchik/calculator .'
             }
         }
     }
